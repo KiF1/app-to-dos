@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 export async function POST(request: NextRequest){
   const authenticateBodySchema = z.object({
@@ -15,11 +16,8 @@ export async function POST(request: NextRequest){
   const user = await prisma.user.findFirst({ where: { email, password } });
   if(!user){
     return NextResponse.json({ error: 'User not exists' }, { status: 401 })
+  }else{
+    cookies().set('user-logged', 'true')
+    return NextResponse.json({ error: 'User Autheticated' }, { status: 200 })
   }
-  
-  return NextResponse.redirect(`${origin}/dashboard`, {
-    headers: {
-      'Set-Cookie': `user-logged=true; Path=/;`,
-    },
-  })
 }
