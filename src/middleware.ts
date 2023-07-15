@@ -6,7 +6,7 @@ export function middleware(request: NextRequest){
   if(!cookie){
     return NextResponse.redirect(origin, {
       headers: {
-        'Set-Cookie': `redirectTo='/dashboard'; Path=/; HttOnly; max-age=20;`,
+        'Set-Cookie': `redirectTo=${request.url}; Path=/; HttOnly; max-age=20;`,
       }
     })
   }

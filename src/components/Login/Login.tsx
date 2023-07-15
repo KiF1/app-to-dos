@@ -25,7 +25,8 @@ export function Login(){
 
   async function handleLogin(data: validationFormData){
     try {
-      await api.post('/auth', data, { headers: { 'Content-Type': 'application/json' } })
+      await api.post('/register', data, { headers: { 'Content-Type': 'application/json' } })
+      await api.get('callback');
       router.push('/dashboard')
     }catch{
       setError(true);
@@ -47,7 +48,7 @@ export function Login(){
             {errors.password && <span className="text-sm text-red font-normal">{errors.password.message}</span>}
           </div>
           {error && <span className="w-full text-sm text-red font-normal">Email ou senha inválidos</span>}
-          <button disabled={isSubmitting} type='submit' className='w-full px-8 py-3 bg-red text-white rounded-lg text-lg font-bold font-serif text-center'>Entrar</button>
+          <button disabled={isSubmitting} data-disabled={isSubmitting} type='submit' className='w-full px-8 py-3 bg-red text-white rounded-lg text-lg font-bold font-serif text-center data-[disabled=true]:cursor-not-allowed data-[disabled=true]:bg-redBorder'>Entrar</button>
         </fieldset>
       </form>
     </div>
