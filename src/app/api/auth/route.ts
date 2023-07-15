@@ -10,7 +10,7 @@ export async function POST(request: NextRequest){
   })
   const body = await request.json();
   const { email, password } = await authenticateBodySchema.parse(body);
-  const { origin } = new URL(request.url);
+  const origin = new URL(request.url);
   const prisma = new PrismaClient();
 
   const user = await prisma.user.findFirst({ where: { email, password } });
@@ -18,13 +18,13 @@ export async function POST(request: NextRequest){
     return NextResponse.json({ error: 'User not exists' }, { status: 401 })
   }
 
-  const cookieExpiresInSeconds = 60 * 60 * 24 * 30
-  return NextResponse.redirect(origin, {
-    headers: {
-      'Set-Cookie': `user-logged=true; Path=/; max-age=${cookieExpiresInSeconds};`,
-    },
-  })
+  // const cookieExpiresInSeconds = 60 * 60 * 24 * 30
+  // return NextResponse.redirect(origin, {
+  //   headers: {
+  //     'Set-Cookie': `user-logged=true; Path=/; max-age=${cookieExpiresInSeconds};`,
+  //   },
+  // })
 
-  // cookies().set('user-logged', 'true', )
-  // return NextResponse.json({ error: 'User Autheticated' }, { status: 200 })
+  cookies().set('user-logged', 'true')
+  return NextResponse.json({ error: 'User Autheticated' }, { status: 200 })
 }
