@@ -11,6 +11,7 @@ export async function POST(request: NextRequest){
   const { email, password } = await authenticateBodySchema.parse(body);
   const { origin } = new URL(request.url);
   const prisma = new PrismaClient();
+  console.log((await prisma.user.findMany()).length)
 
   const user = await prisma.user.findFirst({ where: { email, password } });
   if(!user){
