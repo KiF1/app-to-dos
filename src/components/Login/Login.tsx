@@ -25,8 +25,10 @@ export function Login(){
     if(data.email === 'admin@admin.com' && data.password === 'batman101010'){
       Cookies.set('user-logged', 'true', { expires: 30, path: '/' })
       router.push('/dashboard')
-    }
+    }else{
       setError(true)
+    }
+      
   }
   
   return(
