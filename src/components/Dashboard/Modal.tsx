@@ -11,6 +11,9 @@ import { useState } from 'react';
 interface Props{
   domain: string
   ip: string;
+  setDate: (value: string | null) => void;
+  setDomainRetorned: (value: string | null) => void
+  setIp: (value: string | null) => void
 }
 
 const validationSetFormSchema = z.object({
@@ -20,7 +23,7 @@ const validationSetFormSchema = z.object({
 
 type validationFormData = z.infer<typeof validationSetFormSchema>
 
-export function Modal({ domain, ip }: Props){
+export function Modal({ domain, ip, setDate, setDomainRetorned, setIp }: Props){
   const [sucess, setSucess] = useState<boolean | undefined>(undefined);
   const { handleSubmit } = useForm<validationFormData>({
     resolver: zodResolver(validationSetFormSchema),
@@ -29,8 +32,11 @@ export function Modal({ domain, ip }: Props){
 
   async function handleRegisterDomain(data: validationFormData){
     try {
-      await axios.post('http://64.52.80.144:3000/api/register-domain', data);
-      setSucess(true)
+      await axios.post('https://cors-anywhere.herokuapp.com/http://64.52.80.144:3000/api/register-domain', data);
+      await setSucess(true)
+      setDate(null)
+      setDomainRetorned(null)
+      setIp(null);
     } catch {
       setSucess(false)
     }
