@@ -14,7 +14,7 @@ export default function Dashboard(){
 
   useEffect(() => {
     const newDate = dayjs(date).format('DD-MM-YYYY');
-    api.get(`?=data=${newDate}`).then(response => setDomainRetorned(response.data));
+    api.get(`?=data=${newDate}`, { withCredentials: true }).then(response => setDomainRetorned(response.data));
   }, [date !== null])
 
   return(
