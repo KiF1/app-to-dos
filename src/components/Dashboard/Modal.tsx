@@ -11,9 +11,6 @@ import { useState } from 'react';
 interface Props{
   domain: string
   ip: string;
-  setDate: (value: string | null) => void;
-  setDomainRetorned: (value: string | null) => void
-  setIp: (value: string | null) => void
 }
 
 const validationSetFormSchema = z.object({
@@ -23,7 +20,7 @@ const validationSetFormSchema = z.object({
 
 type validationFormData = z.infer<typeof validationSetFormSchema>
 
-export function Modal({ domain, ip, setDate, setDomainRetorned, setIp }: Props){
+export function Modal({ domain, ip }: Props){
   const [sucess, setSucess] = useState<boolean | undefined>(undefined);
   const { handleSubmit } = useForm<validationFormData>({
     resolver: zodResolver(validationSetFormSchema),
@@ -32,11 +29,8 @@ export function Modal({ domain, ip, setDate, setDomainRetorned, setIp }: Props){
 
   async function handleRegisterDomain(data: validationFormData){
     try {
-      await axios.post('https://cors-anywhere.herokuapp.com/http://64.52.80.144:3000/api/register-domain', data);
+      await axios.post('http://64.52.80.144:3000/api/register-domain', data);
       await setSucess(true)
-      setDate(null)
-      setDomainRetorned(null)
-      setIp(null);
     } catch {
       setSucess(false)
     }
@@ -54,7 +48,7 @@ export function Modal({ domain, ip, setDate, setDomainRetorned, setIp }: Props){
                 <Dialog.Close asChild>
                     <X className="w-12 h-12 right-4 cursor-pointer ml-auto" color='#ffff' aria-label="Close"/>
                 </Dialog.Close>
-                <strong className='text-lg text-white'>Deseja salvar o dominío nesse endereço IP: {ip} ?</strong>
+                <strong className='text-lg text-white'>Deseja salvar o domínio: {domain}, nesse endereço IP: {ip} ?</strong>
                 <div className='w-full grid grid-cols-2 gap-8'>
                   <form onSubmit={handleSubmit(handleRegisterDomain)}>
                     <button type='submit' className='w-full px-6 py-2 bg-white text-black text-lg font-bold rounded-xl'>Salvar</button>

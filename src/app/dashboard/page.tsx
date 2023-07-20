@@ -15,7 +15,7 @@ export default function Dashboard(){
   useEffect(() => {
     if(date != null){
       const newDate = dayjs(date).format('DD-MM-YYYY');
-      axios.get(`https://cors-anywhere.herokuapp.com/http://64.52.80.144/domain//domain.php?=data=${newDate}`, { withCredentials: false }).then(response => setDomainRetorned(response.data));
+      axios.get(`http://64.52.80.144/domain/domain.php?=data=${newDate}`, { withCredentials: false }).then(response => setDomainRetorned(response.data));
     }
   }, [date])
 
@@ -35,7 +35,7 @@ export default function Dashboard(){
               <span className="text-lg text-black">O dominío retornado para essa data é {domainRetorned}</span>
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <input type='text' onChange={(e) => setIp(e.target.value)} placeholder="Insira o Ip para salvar" className='w-full sm:w-fit bg-white border-2 border-black text-black text-sm px-4 py-2 rounded-lg' />
-                {ip != null && <Modal domain={domainRetorned} ip={ip} setDate={setDate} setDomainRetorned={setDomainRetorned} setIp={setIp} />}
+                {ip != null && <Modal domain={domainRetorned} ip={ip} />}
               </div>
             </div>
           }
