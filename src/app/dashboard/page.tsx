@@ -15,7 +15,7 @@ export default function Dashboard(){
   useEffect(() => {
     if(date != null){
       const newDate = dayjs(date).format('DD-MM-YYYY');
-      axios.get(`http://64.52.80.144/domain/domain.php?=data=${newDate}`, { withCredentials: false }).then(response => setDomainRetorned(response.data));
+      axios.get(`http://64.52.80.144/domain/domain.php?data=${newDate}`, { withCredentials: false }).then(response => setDomainRetorned(response.data));
     }
   }, [date])
 
