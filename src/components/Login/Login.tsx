@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from 'js-cookie';
+import { api } from '@/app/lib/api';
 
 const validationLoginFormSchema = z.object({
   email: z.string().min(1, { message: 'Informe um email válido' }).email(),
@@ -22,19 +23,20 @@ export function Login(){
   const router = useRouter()
 
   async function handleLogin(data: validationFormData){
-    if(data.email === 'admin@admin.com' && data.password === 'batman101010'){
-      Cookies.set('user-logged', 'true', { expires: 30, path: '/' })
-      router.push('/dashboard')
-    }else{
-      setError(true)
+    try {
+      await api.post('/login', data, { headers: { 'Content-Type': 'application/json' } }).then(response => {
+        Cookies.set('token', response.data.access_token, { expires: 30, path: '/' })
+        router.push('/code');
+      });
+    }catch{
+      setError(true);
     }
-      
   }
   
   return(
     <div className="w-full min-h-screen relative">
       <form onSubmit={handleSubmit(handleLogin)} className='w-[85%] md:w-[65%] lg:w-[30%] m-auto rounded-2xl flex flex-col p-10 items-center gap-8 absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-[rgb(240, 242, 245)] shadow-2xl'>
-        <h1 className='text-xl  font-serif text-black'>Fazer login</h1>
+        <h1 className='text-xl  font-serif text-black'>Login</h1>
         <fieldset className='w-full flex flex-col gap-6 m-auto items-center'>
           <div className="w-full flex flex-col gap-2">
             <input {...register('email')} type='email' placeholder='E-mail' className='w-full px-2 py-2 text-black text-sm font-normal rounded-lg border-2 border-grayBorder focus:outline-black'  />

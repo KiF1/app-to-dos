@@ -1,13 +1,22 @@
 'use client'
 
-import { HeaderLinks } from "./HeaderLinks";
-import { HeaderMobile } from "./HeaderMobile";
+import Link from "next/link";
+import { LayoutDashboard, LogOut } from "lucide-react";
+import { usePathname } from 'next/navigation';
+
 
 export function HeaderBig(){
+  const currentRoute = usePathname();
+  const dashboardRouteActive: boolean = currentRoute === '/dashboard';
+
   return(
-    <div className="w-full fixed z-50 top-0 lg:relative flex items-center justify-end lg:justify-start lg:flex-col gap-12 lg:gap-4 p-4 sm:p-8 lg:p-6 bg-black h-[150px] lg:h-full">
-      <HeaderLinks />
-      <HeaderMobile />
+    <div className="w-full mt-auto h-fit bg-gray-200 shadow-lg flex gap-4 justify-around items-center p-4">
+       <Link href="/dashboard" data-active={dashboardRouteActive} className="w-fit flex items-center py-2 px-4 font-bold data-[active=true]:border-t-2 data-[active=true]:border-black">
+        {dashboardRouteActive ? <LayoutDashboard color="black" /> : <LayoutDashboard color="gray" />  }
+      </Link>
+      <Link href="/api/logout" className="w-fit flex items-center py-2 px-4  gap-4 text-white ">
+        <LogOut color="gray" />
+      </Link>
     </div>
   )
 }
