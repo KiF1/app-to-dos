@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from 'zod';
+import { api } from "../lib/api";
 
 const validationCodeFormSchema = z.object({
   code: z.string().min(1, { message: 'Informe um Código válido' }).max(4, {message: 'O código possui apenas 4 números'}),
@@ -15,6 +16,7 @@ const validationCodeFormSchema = z.object({
 type validationFormData = z.infer<typeof validationCodeFormSchema>
 
 export default function Dashboard(){
+  const token = Cookies.get('token');
   const [error, setError] = useState(false);
   const { handleSubmit, register, formState: { isSubmitting, errors } } = useForm<validationFormData>({
     resolver: zodResolver(validationCodeFormSchema)
@@ -22,12 +24,10 @@ export default function Dashboard(){
   const router = useRouter()
 
   async function handleCode(data: validationFormData){
-    if(data.code === '1234'){
+    await api.get(`users/verify-code-pass/${data.code}`, { headers: {'Authorization': `Bearer ${token}` }}).then(() => {
       Cookies.set('code-verified', 'true', { expires: 1, path: '/' })
       router.push('/dashboard');
-    }else{
-      setError(true)
-    }    
+    }).catch(() => setError(true))  
   }
 
   return(
@@ -39,7 +39,7 @@ export default function Dashboard(){
           {errors.code && <span className="text-sm text-black font-normal">{errors.code.message}</span>}
         </div>
         {error && <span className="w-full text-sm text-black font-normal">Código inválido</span>}
-        <button type='submit' className='w-full px-8 py-3 bg-black text-white rounded-lg text-lg font-bold font-serif text-center data-[disabled=true]:cursor-not-allowed data-[disabled=true]:bg-black'>Verificar Código</button>
+        <button disabled={isSubmitting} data-disabled={isSubmitting} type='submit' className='w-full px-8 py-3 bg-black text-white rounded-lg text-lg font-bold font-serif text-center data-[disabled=true]:cursor-not-allowed data-[disabled=true]:bg-black'>Verificar Código</button>
       </form>
     </div>
   )
