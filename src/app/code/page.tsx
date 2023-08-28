@@ -25,7 +25,8 @@ export default function Dashboard(){
 
   async function handleCode(data: validationFormData){
     await api.get(`users/verify-code-pass/${data.code}`, { headers: {'Authorization': `Bearer ${token}` }}).then(() => {
-      Cookies.set('code-verified', 'true', { expires: 1, path: '/' })
+      const combinedValue =  token + '|' + true
+      Cookies.set('token_code', combinedValue, { expires: 1, path: '/' })
       router.push('/dashboard');
     }).catch(() => setError(true))  
   }

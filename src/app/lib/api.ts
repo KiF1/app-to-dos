@@ -3,7 +3,9 @@
 import axios from 'axios'
 import Cookies from 'js-cookie';
 
-const token = Cookies.get('token')
+const isAuthenticated = Cookies.get('token_code');
+const value = isAuthenticated?.split('|');
+const token = value !== undefined ? value[0] : ''
 
 export const api = axios.create({
   baseURL: 'https://engratech11.com/api',

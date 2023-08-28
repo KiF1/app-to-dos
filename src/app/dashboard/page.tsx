@@ -16,10 +16,9 @@ export interface Todo{
 }
 
 export default function Dashboard(){
-  const token = Cookies.get('token');
+  const token = Cookies.get('token_code');
 
   const { data, refetch } = useQuery<Todo[]>(['todos-user'], async () => {
-    console.log(token)
     const response = await api.post('/me', { headers: {'Authorization': `Bearer ${token}` }});
     const responseTodo = await api.post(`/to-dos/user/all/${response.data.id}`, { headers: {'Authorization': `Bearer ${token}` }})
     return responseTodo.data;

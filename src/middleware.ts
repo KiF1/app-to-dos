@@ -3,9 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 export function middleware(request: NextRequest){
   const { origin } = new URL(request.url);
   
+  
   if (request.nextUrl.pathname.startsWith('/dashboard')) {
-    const cookie = request.cookies.get('code-verified')?.value
-    if(!cookie){
+    const tokenAndCode = request.cookies.get('token_code')?.value
+    const token = request.cookies.get('token')?.value
+    if(!token && !tokenAndCode){
       return NextResponse.redirect(`${origin}/code`, {
         headers: {
           'Set-Cookie': `redirectTo=${request.url}; Path=/; HttOnly; max-age=20;`,
@@ -16,8 +18,8 @@ export function middleware(request: NextRequest){
   }
  
   if (request.nextUrl.pathname.startsWith('/code')) {
-    const cookie = request.cookies.get('token')?.value
-    if(!cookie){
+    const token = request.cookies.get('token')?.value
+    if(!token){
       return NextResponse.redirect(origin, {
         headers: {
           'Set-Cookie': `redirectTo=${request.url}; Path=/; HttOnly; max-age=20;`,
