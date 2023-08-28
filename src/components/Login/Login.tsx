@@ -20,12 +20,13 @@ export function Login(){
   const { handleSubmit, register, formState: { isSubmitting, errors } } = useForm<validationFormData>({
     resolver: zodResolver(validationLoginFormSchema)
   });
-  const router = useRouter()
+  const router = useRouter();
+  const timeExpiresToken = new Date(new Date().getTime() + 60 * 60 * 1000); // 1 hora
 
   async function handleLogin(data: validationFormData){
     try {
       await api.post('/login', data, { headers: { 'Content-Type': 'application/json' } }).then(response => {
-        Cookies.set('token', response.data.access_token, { expires: 10, path: '/' })
+        Cookies.set('token', response.data.access_token, { expires: timeExpiresToken, path: '/' })
         api.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`;
         router.push('/code');
       });

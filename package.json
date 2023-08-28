@@ -24,6 +24,7 @@
     "debug": "^4.3.4",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.260.0",
+    "mem": "^9.0.2",
     "mysql2": "^3.5.1",
     "next": "13.4.10",
     "nextjs-cors": "^2.1.2",
