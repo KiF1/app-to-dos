@@ -12,7 +12,7 @@ export function HeaderBig(){
   const router = useRouter();
 
   function signOut(){
-    Cookies.remove('token_role');
+    Cookies.remove('token_code');
     router.push('/')
   }
 
