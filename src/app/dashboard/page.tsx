@@ -7,6 +7,7 @@ import { api } from "../lib/api";
 import Cookies from "js-cookie";
 import { useQuery } from "@tanstack/react-query";
 import ReactLoading from "react-loading";
+import { useEffect, useState } from "react";
 
 export interface Todo{
   id: number;
@@ -16,12 +17,17 @@ export interface Todo{
 }
 
 export default function Dashboard(){
+  const [errorMe, setErroMe] = useState<boolean>(false)
   const token = Cookies.get('token_code');
 
   const { data, refetch } = useQuery<Todo[]>(['todos-user'], async () => {
-    const response = await api.post('/me', { headers: {'Authorization': `Bearer ${token}` }});
-    const responseTodo = await api.post(`/to-dos/user/all/${response.data.id}`, { headers: {'Authorization': `Bearer ${token}` }})
-    return responseTodo.data;
+    try {
+      const response = await api.post('/me', { headers: {'Authorization': `Bearer ${token}` }});
+      const responseTodo = await api.post(`/to-dos/user/all/${response.data.id}`, { headers: {'Authorization': `Bearer ${token}` }})
+      return responseTodo.data;
+    } catch {
+      setErroMe(true)
+    }
   });
 
   async function setRed(id: number){
@@ -35,6 +41,12 @@ export default function Dashboard(){
       refetch()
     })
   }
+
+  useEffect(() => {
+      if(errorMe){
+        window.location.reload(); 
+      }
+  }, [errorMe])
 
 
   return(
