@@ -14,7 +14,7 @@ export function HeaderBig(){
 
   async function signOut(){
     await Cookies.remove('token_code');
-    await queryClient.invalidateQueries();
+    await queryClient.clear();
     router.push('/')
   }
 
