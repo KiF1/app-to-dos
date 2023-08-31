@@ -4,6 +4,7 @@ import Link from "next/link";
 import { LayoutDashboard, LogOut } from "lucide-react";
 import { usePathname, useRouter } from 'next/navigation';
 import Cookies from "js-cookie";
+import { queryClient } from "@/app/lib/react-query";
 
 
 export function HeaderBig(){
@@ -11,8 +12,9 @@ export function HeaderBig(){
   const dashboardRouteActive: boolean = currentRoute === '/dashboard';
   const router = useRouter();
 
-  function signOut(){
-    Cookies.remove('token_code');
+  async function signOut(){
+    await Cookies.remove('token_code');
+    await queryClient.clear();
     router.push('/')
   }
 
