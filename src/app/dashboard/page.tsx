@@ -17,6 +17,7 @@ export interface Todo{
 }
 
 export default function Dashboard(){
+  const [pendingSubmit, setIsPendingSubmit] = useState<boolean>(false)
   const [errorMe, setErroMe] = useState<boolean>(false)
   const token = Cookies.get('token_code');
 
@@ -31,15 +32,25 @@ export default function Dashboard(){
   });
 
   async function setRed(id: number){
-    await api.post(`/to-dos/setRed/${id}`, { headers: {'Authorization': `Bearer ${token}` }}).then(() => {
-      refetch()
-    })
+    setIsPendingSubmit(true)
+    try {
+      await api.post(`/to-dos/setRed/${id}`, { headers: {'Authorization': `Bearer ${token}` }}).then(() => {
+        refetch()
+      })
+    }finally{
+      setIsPendingSubmit(false)
+    }
   }
 
   async function setGreen(id: number){
-    await api.post(`/to-dos/setGreen/${id}`, { headers: {'Authorization': `Bearer ${token}` }}).then(() => {
-      refetch()
-    })
+    setIsPendingSubmit(true)
+    try {
+      await api.post(`/to-dos/setGreen/${id}`, { headers: {'Authorization': `Bearer ${token}` }}).then(() => {
+        refetch()
+      })
+    }finally{
+      setIsPendingSubmit(false)
+    }
   }
 
   useEffect(() => {
@@ -64,8 +75,8 @@ export default function Dashboard(){
                   <span className="text-lg font-bold">Código: {item.cod}</span>
                   <span className="text-lg font-bold">R$ {item.price}</span>
                   <div className="w-full grid grid-cols-2 gap-4 mt-4">
-                    <button onClick={() => setRed(item.id)} type="button" className="w-full border-0 rounded-lg text-center bg-red p-4"><X className="m-auto" color="white" /></button>
-                    <button onClick={() => setGreen(item.id)} type="button" className="w-full border-0 rounded-lg text-center bg-green-600 p-4"><Check className="m-auto" color="white" /></button>
+                    <button disabled={pendingSubmit} data-disabled={pendingSubmit} onClick={() => setRed(item.id)} type="button" className="w-full border-0 rounded-lg text-center bg-red p-4 data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-75"><X className="m-auto" color="white" /></button>
+                    <button disabled={pendingSubmit} data-disabled={pendingSubmit} onClick={() => setGreen(item.id)} type="button" className="w-full border-0 rounded-lg text-center bg-green-600 p-4 data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-75"><Check className="m-auto" color="white" /></button>
                   </div>
                 </div>
               ))}
