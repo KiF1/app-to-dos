@@ -40,7 +40,7 @@ export default function Dashboard(){
           {errors.code && <span className="text-sm text-black font-normal">{errors.code.message}</span>}
         </div>
         {error && <span className="w-full text-sm text-black font-normal">Código inválido</span>}
-        <button disabled={isSubmitting} data-disabled={isSubmitting} type='submit' className='w-full px-8 py-3 bg-black text-white rounded-lg text-lg font-bold font-serif text-center data-[disabled=true]:cursor-not-allowed data-[disabled=true]:bg-black'>Verificar Código</button>
+        <button disabled={isSubmitting} data-disabled={isSubmitting} type='submit' className='w-full px-8 py-3 bg-black text-white rounded-lg text-lg font-bold font-serif text-center data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-75'>Verificar Código</button>
       </form>
     </div>
   )

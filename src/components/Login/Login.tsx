@@ -48,7 +48,7 @@ export function Login(){
             {errors.password && <span className="text-sm text-black font-normal">{errors.password.message}</span>}
           </div>
           {error && <span className="w-full text-sm text-black font-normal">Email ou senha inválidos</span>}
-          <button disabled={isSubmitting} data-disabled={isSubmitting} type='submit' className='w-full px-8 py-3 bg-black text-white rounded-lg text-lg font-bold font-serif text-center data-[disabled=true]:cursor-not-allowed data-[disabled=true]:bg-black'>Entrar</button>
+          <button disabled={isSubmitting} data-disabled={isSubmitting} type='submit' className='w-full px-8 py-3 bg-black text-white rounded-lg text-lg font-bold font-serif text-center data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-75'>Entrar</button>
         </fieldset>
       </form>
     </div>
