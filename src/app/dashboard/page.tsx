@@ -17,7 +17,8 @@ export interface Todo{
 }
 
 export default function Dashboard(){
-  const [pendingSubmit, setIsPendingSubmit] = useState<boolean>(false)
+  const [sendSubmit, setSendSubmit] = useState(false);
+  const [pendingSubmit, setIsPendingSubmit] = useState<boolean | null>(null)
   const [errorMe, setErroMe] = useState<boolean>(false)
   const token = Cookies.get('token_code');
 
@@ -39,6 +40,7 @@ export default function Dashboard(){
       })
     }finally{
       setIsPendingSubmit(false)
+      setSendSubmit(true)
     }
   }
 
@@ -50,6 +52,7 @@ export default function Dashboard(){
       })
     }finally{
       setIsPendingSubmit(false)
+      setSendSubmit(true)
     }
   }
 
@@ -59,6 +62,12 @@ export default function Dashboard(){
       }
   }, [errorMe])
 
+  useEffect(() => {
+    setTimeout(() => {
+      setSendSubmit(false)
+    }, 2000)
+  }, [sendSubmit])
+
 
   return(
     <div className="w-full flex flex-col gap-4 h-screen">
@@ -67,7 +76,7 @@ export default function Dashboard(){
       </div>
       <div className="h-[85vh] flex relative overflow-y-scroll">
         <div className="w-full absolute flex flex-col gap-12 p-4 lg:pr-8 pb-12">
-          {data !== undefined && data.length >= 1 ? (
+          {data !== undefined && data.length >= 1 && !sendSubmit ? (
             <div className="w-full flex flex-col gap-4">
               {data.map(item => (
                 <div key={item.id} className="w-full shadow-sm bg-white p-8 flex flex-col justify-center rounded-md items-center gap-2">
@@ -75,15 +84,19 @@ export default function Dashboard(){
                   <span className="text-lg font-bold">Código: {item.cod}</span>
                   <span className="text-lg font-bold">R$ {item.price}</span>
                   <div className="w-full grid grid-cols-2 gap-4 mt-4">
-                    <button disabled={pendingSubmit} data-disabled={pendingSubmit} onClick={() => setRed(item.id)} type="button" className="w-full border-0 rounded-lg text-center bg-red p-4 data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-75"><X className="m-auto" color="white" /></button>
-                    <button disabled={pendingSubmit} data-disabled={pendingSubmit} onClick={() => setGreen(item.id)} type="button" className="w-full border-0 rounded-lg text-center bg-green-600 p-4 data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-75"><Check className="m-auto" color="white" /></button>
+                    <button disabled={pendingSubmit === true} data-disabled={pendingSubmit === true} onClick={() => setRed(item.id)} type="button" className="w-full border-0 rounded-lg text-center bg-red p-4 data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-75"><X className="m-auto" color="white" /></button>
+                    <button disabled={pendingSubmit === true} data-disabled={pendingSubmit === true} onClick={() => setGreen(item.id)} type="button" className="w-full border-0 rounded-lg text-center bg-green-600 p-4 data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-75"><Check className="m-auto" color="white" /></button>
                   </div>
                 </div>
               ))}
           </div>
-          ) : data !== undefined && data.length === 0 ? (
+          ) : data !== undefined && data.length === 0 && !sendSubmit ? (
             <div className="w-full h-[70vh] flex items-center justify-center">
               <strong className="text-lg font-bold">Não existe to-do relacionado ao seu usuário</strong>
+            </div>
+          ) : data !== undefined && sendSubmit ? (
+            <div className="w-full h-[70vh] flex items-center justify-center">
+              <ReactLoading className="w-fit" type="spinningBubbles" color="#000000" height='80px' width='100px' />
             </div>
           ) : (
             <div className="w-full h-[70vh] flex items-center justify-center">
